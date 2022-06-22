@@ -4,30 +4,35 @@
 
 
 
+/* --- 各種定数 --- */
+const allowedTags = ['b', 'i', 'u', 's', 'br', 'font'];
+
+
+
 /* --- 各種タグを挿入する --- */
 const insertTagToSelectedRange = tagName => {
 	const selection = window.getSelection();
 	if (!selection.rangeCount || !checkParentId(selection.baseNode.parentNode, 'description-wysiwyg')) return;
 	const range = selection.getRangeAt(0);
 	if (tagName.length > 0) {
+		/* タグを挿入する場合 */
 		const node     = document.createElement(tagName);
 		node.innerHTML = selection.toString();
 		range.deleteContents();
 		range.insertNode(node);
+		range.selectNodeContents(node);
 	} else {
+		/* 装飾を消す場合 */
 		const content  = range.cloneContents().firstChild;
-		const diffNode = selection.baseNode.nextSibling || selection.baseNode;
+		let diffNode   = selection.baseNode.nextSibling || selection.baseNode;
+		const diffName = (diffNode.tagName || diffNode.parentNode.tagName).toLowerCase();
 		let diffParent = diffNode.parentNode;
-		console.log('----------------------------------------');
-		console.log((diffNode.tagName || diffNode.parentNode.tagName).toLowerCase());
-		console.log(range.toString(), diffNode.textContent);
-		if (range.toString() === diffNode.textContent || ['b', 'i', 'u', 's', 'font'].includes((diffNode.tagName || diffNode.parentNode.tagName).toLowerCase())) {
-			if (diffNode.nodeName === "#text") {
-				range.selectNode(diffNode.parentNode);
-				diffParent = diffNode.parentNode.parentNode;
-			} else {
-				range.selectNode(diffNode);
+		if (range.toString() === diffNode.textContent || allowedTags.includes(diffName)) {
+			while (diffNode.nodeName === '#text' || (allowedTags.includes(diffNode.parentNode.tagName.toLowerCase()) && diffNode.textContent === diffNode.parentNode.textContent)) {
+				diffNode = diffNode.parentNode;
 			}
+			range.selectNode(diffNode);
+			diffParent = diffNode.parentNode;
 		}
 		if (diffParent.id === 'description-wysiwyg') {
 			const node     = document.createElement('div');
@@ -39,7 +44,6 @@ const insertTagToSelectedRange = tagName => {
 			range.deleteContents();
 			range.insertNode(node);
 		}
-		console.log(diffParent);
 		diffParent.normalize();
 	}
 };
