@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" type="text/css" href="./spectre.min.css"> <!-- Spectre: https://picturepan2.github.io/spectre/index.html -->
+	<link rel="stylesheet" type="text/css" href="./main.css">
+	<script type="text/javascript" src="./main.js"></script>
+	<title>ニコ生説明文エディタ</title>
+</head>
+<body>
+
+<!-- タイトルバー -->
+<div class="container">
+	<div class="columns">
+		<div class="column col-12">
+			<h1>ニコ生説明文エディタ</h1>
+			<hr>
+		</div>
+	</div>
+</div>
+
+<!-- コントロールエリア -->
+<div class="container">
+	<div class="columns">
+		<div class="column col-6">
+			<div class="btn-group">
+				<button id="set-bold" class="btn">太字</button>
+				<button id="set-italic" class="btn">斜体</button>
+				<button id="set-underline" class="btn">下線</button>
+				<button id="set-strikethrough" class="btn">打消線</button>
+				<button id="reset-style" class="btn">スタイルを削除</button>
+			</div>
+		</div>
+	</div>
+	<div class="columns">
+		<div class="column col-12"><hr></div>
+	</div>
+</div>
+
+<!-- テキストエリア -->
+<div class="container">
+	<div class="columns">
+		<div class="column col-6">
+			<span class="caption">以下に説明文を入力</span>
+			<div id="description-wysiwyg" contenteditable="true">
+				<div>ここに説明文を入力します。</div>
+			</div>
+		</div>
+		<div class="column col-6">
+			<span class="caption">ニコ生用に変換したHTML</span>
+			<textarea id="description-html" cols="30" rows="10">ここに説明文を入力します。</textarea>
+		</div>
+	</div>
+</div>
+
+</body>
+</html>

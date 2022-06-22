@@ -1,0 +1,35 @@
+/*
+ * ニコ生説明文エディタ メインスタイル
+ */
+
+
+
+/* --- 全体レイアウト --- */
+.container {
+  max-width : 1440px;
+}
+
+
+
+/* --- タイトルバー --- */
+h1 {
+  margin-top : 0.5rem;
+}
+
+
+
+/* --- テキストエリア --- */
+.caption {
+  display     : block;
+  text-align  : center;
+  user-select : none;
+}
+#description-wysiwyg, #description-html {
+  padding       : 0.5rem;
+  height        : 50vh;
+  border        : solid 1px #444;
+  border-radius : 0.1rem;
+}
+#description-html {
+  width : 100%;
+}
