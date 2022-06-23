@@ -104,13 +104,13 @@ const exportHTML = () => {
 	const editableChildren = [... editableArea.children].map(child => [... child.childNodes]).flat();
 	editableChildren.forEach(child => removeForbiddenTags(child));
 	/* テキストを取得 */
-	let htmlText     = editableArea.innerHTML.replace(/<br>/g, '<br />').trim();
+	let htmlText     = editableArea.innerHTML.replace(/<br>/g, '<br />');
 	let lastHtmlText = htmlText;
 	do {
 		lastHtmlText = htmlText;
 		htmlText     = htmlText.replace(/<(?:div|p)>(.*?)<\/(?:div|p)>/gs, '$1<br />\n');
 	} while (htmlText !== lastHtmlText);
-	htmlText = htmlText.replace(/<br \/>$/g, '');
+	htmlText = htmlText.trim().replace(/<br(?: \/)?>$/g, '');
 	/* テキストエリアを更新 */
 	const textarea = document.getElementById('description-html');
 	textarea.value = htmlText;
@@ -242,5 +242,23 @@ document.addEventListener('DOMContentLoaded', () => {
 		div.style.backgroundColor = color;
 		button.appendChild(div);
 		parent.appendChild(button);
+	});
+});
+
+
+
+/* --- モーダル: ちょっとした説明 --- */
+const openModalDescription = () => {
+	document.getElementById('modal-description').classList.add('active');
+};
+const closeModal = event => {
+	event.preventDefault();
+	const modal = event.currentTarget.closest('.modal');
+	modal.classList.remove('active');
+};
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('open-description-modal').addEventListener('click', openModalDescription);
+	[... document.querySelectorAll('[aria-label="Close"]')].forEach(el => {
+		el.addEventListener('click', closeModal);
 	});
 });

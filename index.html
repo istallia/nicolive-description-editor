@@ -15,7 +15,7 @@
 	<div class="columns">
 		<div class="column col-12">
 			<h1>ニコ生説明文エディタ</h1>
-			<a href="javascript:void(0);">ちょっとした説明</a>
+			<a href="javascript:void(0);" id="open-description-modal">ちょっとした説明</a>
 			<hr>
 		</div>
 	</div>
@@ -79,6 +79,52 @@
 			<span class="caption">ニコ生用に変換したHTML</span>
 			<textarea id="description-html" cols="30" rows="10">ここに説明文を入力します。</textarea>
 		</div>
+	</div>
+</div>
+
+<!-- モーダル: ちょっとした説明 -->
+<div id="modal-description" class="modal modal-lg">
+	<a href="#close" class="modal-overlay" aria-label="Close"></a>
+	<div class="modal-container">
+		<div class="modal-header">
+			<a href="#close" class="btn btn-clear float-right" aria-label="Close"></a>
+			<div class="modal-title h5">ちょっとした説明</div>
+		</div>
+		<div class="modal-body">
+			<div class="content">
+				<h4>概要</h4>
+				<p>
+					ニコ生の説明文に用いるHTMLテキストを直感的に作れるツールです。タイトルにニコ生と入っていますが、コミュの説明文にも使えます。<br>
+					Webページなのでインストール不要で使えます。<br>
+					NETE(Niconico Easy Text Editor)というものがあったようなのですが、レンタルサーバーがサービス終了してしまったらしく、他サーバーで復活という話も見なかったので作ってみました。
+				</p>
+				<h4>使い方</h4>
+				<p>
+					左の欄に説明文を入力し、必要に応じて装飾します。<br>
+					説明文が出来上がったら左上の「HTMLに変換」ボタンを押して変換します。<br>
+					変換結果は右の欄に出力されますので、それをコピーして持って行ってください。
+				</p>
+				<h4>niconico-darkmodeとは</h4>
+				<p>
+					猫月あゆむ(<a href="https://twitter.com/nekozuki_2525" target="_blank">@nekozuki_2525</a>)氏が公開しているChrome拡張機能/Firefoxアドオンで、ニコニコのサイトをダークモード化することができます。<br>
+					ニコニコ大百科: <a href="https://dic.nicovideo.jp/a/niconico%20darkmode" target="_blank">dic.nicovideo.jp/a/niconico darkmode</a>
+				</p>
+				<p>
+					ただ、ダークモード化していると動画やニコ生、コミュの説明文に色指定の装飾が含まれる場合、非常に見づらくなることがあります。<br>
+					これによるダークモードは非公式な機能であり、対応しなければならないというものでは全くありませんが、手軽に確認できれば対応しやすいと思い、確認機能をつけています。
+				</p>
+				<h4>NETEにはあったが本ツールにはない機能</h4>
+				<p>
+					使ったことがないのでスクショを見た感じで拾ってます。
+				</p>
+				<ul>
+					<li><span class="text-bold">戻る</span> - どこまで戻すかをどう決定するか迷ったので保留</li>
+					<li><span class="text-bold">色登録</span> - 代わりに使った色の履歴を残すようにしてみた</li>
+					<li><span class="text-bold">自動変換</span> - 自動である必要性を感じなかった</li>
+				</ul>
+			</div>
+		</div>
+		<div class="modal-footer"></div>
 	</div>
 </div>
 
