@@ -5,8 +5,9 @@
 
 
 /* --- 各種定数 --- */
-const allowedTags  = ['b', 'i', 'u', 's', 'br', 'font'];
-const indentedTags = ['p', 'div'];
+const allowedTags     = ['b', 'i', 'u', 's', 'br', 'font'];
+const indentedTags    = ['p', 'div'];
+const maxHistoryCount = 12;
 
 
 
@@ -40,6 +41,7 @@ const insertTagToSelectedRange = (tagName, attributes = {}) => {
 		range.deleteContents();
 		range.insertNode(node);
 		range.selectNodeContents(node);
+		if (Object.keys(attributes).includes('color')) recordColorHistory(attributes['color']);
 	} else {
 		/* 装飾を消す場合 */
 		const content  = range.cloneContents().firstChild;
@@ -102,7 +104,13 @@ const exportHTML = () => {
 	const editableChildren = [... editableArea.children].map(child => [... child.childNodes]).flat();
 	editableChildren.forEach(child => removeForbiddenTags(child));
 	/* テキストを取得 */
-	const htmlText = editableArea.innerHTML.replace(/<div>(.*?)<\/div>/g, '$1<br />\n').replace(/<br>/g, '<br />').trim().replace(/<br \/>$/g, '');
+	let htmlText     = editableArea.innerHTML.replace(/<br>/g, '<br />').trim();
+	let lastHtmlText = htmlText;
+	do {
+		lastHtmlText = htmlText;
+		htmlText     = htmlText.replace(/<(?:div|p)>(.*?)<\/(?:div|p)>/gs, '$1<br />\n');
+	} while (htmlText !== lastHtmlText);
+	htmlText = htmlText.replace(/<br \/>$/g, '');
 	/* テキストエリアを更新 */
 	const textarea = document.getElementById('description-html');
 	textarea.value = htmlText;
@@ -188,3 +196,51 @@ const removeDuplicatedTags = element => {
 		if (replaceCount++ > 1023) break;
 	}
 };
+
+
+
+/* --- 色の記録 --- */
+const recordColorHistory = color => {
+	/* 色を記録(データ) */
+	const history = JSON.parse(localStorage.getItem('color-history') || '[]');
+	const index   = history.indexOf(color);
+	if (index > -1) history.splice(index, 1);
+	history.unshift(color);
+	if (history.length > maxHistoryCount) history.pop();
+	localStorage.setItem('color-history', JSON.stringify(history));
+	/* 色を記録(ボタン) */
+	const parent = document.getElementById('color-history');
+	if (index > -1) {
+		const button = parent.children[index];
+		parent.insertBefore(button, parent.firstElementChild);
+	} else {
+		const button = document.createElement('button');
+		const div    = document.createElement('div');
+		button.classList.add('btn', 'color-rect');
+		button.title = color;
+		button.addEventListener('click', applyColor);
+		div.style.backgroundColor = color;
+		button.appendChild(div);
+		parent.insertBefore(button, parent.firstElementChild);
+	}
+	if (parent.children.length > maxHistoryCount) parent.lastElementChild.remove();
+};
+const applyColor = event => {
+	const color = event.currentTarget.title;
+	const form  = document.getElementById('font-color');
+	form.value  = color;
+};
+document.addEventListener('DOMContentLoaded', () => {
+	const history = JSON.parse(localStorage.getItem('color-history') || '[]');
+	const parent  = document.getElementById('color-history');
+	history.forEach(color => {
+		const button = document.createElement('button');
+		const div    = document.createElement('div');
+		button.classList.add('btn', 'color-rect');
+		button.title = color;
+		button.addEventListener('click', applyColor);
+		div.style.backgroundColor = color;
+		button.appendChild(div);
+		parent.appendChild(button);
+	});
+});

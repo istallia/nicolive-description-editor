@@ -28,7 +28,11 @@ label[for="switch-dark-theme"] {
   user-select : none;
 }
 .color-rect {
+  margin       : 0px 0.15rem;
   border-color : #444444;
+}
+.color-rect:first-of-type {
+  margin-left : 0px;
 }
 .color-rect > div {
   display      : inline-block;
@@ -50,6 +54,7 @@ label[for="switch-dark-theme"] {
   border           : solid 1px #444;
   border-radius    : 0.1rem;
   background-color : inherit;
+  overflow-y       : auto;
 }
 #description-wysiwyg {
   transition : background-color 300ms, color 300ms;
