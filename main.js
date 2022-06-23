@@ -81,25 +81,8 @@ const checkParentId = (node, targetId) => {
 /* --- HTMLをエクスポート --- */
 const exportHTML = () => {
 	/* 同じタグの入れ子を削除 */
-	const editableArea    = document.getElementById('description-wysiwyg');
-	const allowedSelector = allowedTags.map(tag => `${tag}>${tag}`).join(',');
-	let nestElements      = [... editableArea.querySelectorAll(allowedSelector)].filter(el => {
-		el.parentNode.normalize();
-		return el.childNodes.length === 1;
-	});
-	let replaceCount = 0;
-	while (nestElements.length > 0) {
-		nestElements.forEach(element => {
-			if (element.parentNode.childNodes.length === 1 && element.children.length < 1) {
-				element.parentNode.replaceWith(element);
-			}
-		});
-		nestElements = [... editableArea.querySelectorAll(allowedSelector)].filter(el => {
-			el.parentNode.normalize();
-			return el.childNodes.length === 1;
-		});
-		if (replaceCount++ > 255) break;
-	}
+	const editableArea = document.getElementById('description-wysiwyg');
+	removeDuplicatedTags(editableArea);
 	/* 許可されないタグと属性を削除 */
 	const editableChildren = [... editableArea.children].map(child => [... child.childNodes]).flat();
 	editableChildren.forEach(child => removeForbiddenTags(child));
@@ -111,6 +94,30 @@ const exportHTML = () => {
 };
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('export-html').addEventListener('click', exportHTML);
+});
+
+
+
+/* --- HTMLをインポート --- */
+const importHTML = () => {
+	/* テキストをパース */
+	const htmlText = document.getElementById('description-html').value;
+	const parser   = new DOMParser();
+	const htmlNode = parser.parseFromString(htmlText, 'text/html');
+	/* 同じタグの入れ子を削除 */
+	removeDuplicatedTags(htmlNode.body);
+	/* 許可されないタグと属性を削除 */
+	const newChildren = [... htmlNode.body.children].map(child => [... child.childNodes]).flat();
+	newChildren.forEach(child => removeForbiddenTags(child));
+	/* エディタを更新 */
+	const editableArea = document.getElementById('description-wysiwyg');
+	const div          = document.createElement('div');
+	[... editableArea.childNodes].forEach(child => child.remove());
+	[... htmlNode.body.childNodes].forEach(child => div.appendChild(child));
+	editableArea.appendChild(div);
+};
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('import-html').addEventListener('click', importHTML);
 });
 
 
@@ -140,5 +147,29 @@ const removeForbiddenTags = element => {
 				element.attributes.removeNamedItem(attr.name);
 			}
 		});
+	}
+};
+
+
+
+/* --- 入れ子になった同一タグを削除 --- */
+const removeDuplicatedTags = element => {
+	const allowedSelector = allowedTags.map(tag => `${tag}>${tag}`).join(',');
+	let nestElements      = [... element.querySelectorAll(allowedSelector)].filter(el => {
+		el.parentNode.normalize();
+		return el.childNodes.length === 1;
+	});
+	let replaceCount = 0;
+	while (nestElements.length > 0) {
+		nestElements.forEach(element => {
+			if (element.parentNode.childNodes.length === 1 && element.children.length < 1) {
+				element.parentNode.replaceWith(element);
+			}
+		});
+		nestElements = [... element.querySelectorAll(allowedSelector)].filter(el => {
+			el.parentNode.normalize();
+			return el.childNodes.length === 1;
+		});
+		if (replaceCount++ > 1023) break;
 	}
 };
