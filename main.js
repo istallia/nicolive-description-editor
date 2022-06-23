@@ -10,6 +10,21 @@ const indentedTags = ['p', 'div'];
 
 
 
+/* --- niconico-darkmode 切り替え --- */
+const switchDarkTheme = event => {
+	const editableArea = document.getElementById('description-wysiwyg');
+	if (event.currentTarget.checked) {
+		editableArea.classList.add('dark-theme');
+	} else {
+		editableArea.classList.remove('dark-theme');
+	}
+};
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('switch-dark-theme').addEventListener('change', switchDarkTheme);
+});
+
+
+
 /* --- 各種タグを挿入する --- */
 const insertTagToSelectedRange = (tagName, attributes = {}) => {
 	const selection = window.getSelection();

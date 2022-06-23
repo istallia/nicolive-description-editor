@@ -5,10 +5,6 @@
 
 
 /* --- 全体レイアウト --- */
-body.dark-theme {
-  background-color : #1a1b1c;
-  color            : white;
-}
 .container {
   max-width : 1440px;
 }
@@ -54,6 +50,13 @@ label[for="switch-dark-theme"] {
   border           : solid 1px #444;
   border-radius    : 0.1rem;
   background-color : inherit;
+}
+#description-wysiwyg {
+  transition : background-color 300ms, color 300ms;
+}
+#description-wysiwyg.dark-theme {
+  color            : white;
+  background-color : #1a1b1c;
 }
 #description-html {
   width : 100%;
