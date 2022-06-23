@@ -5,7 +5,8 @@
 
 
 /* --- 各種定数 --- */
-const allowedTags = ['b', 'i', 'u', 's', 'br', 'font'];
+const allowedTags  = ['b', 'i', 'u', 's', 'br', 'font'];
+const indentedTags = ['p', 'div'];
 
 
 
@@ -73,4 +74,71 @@ const checkParentId = (node, targetId) => {
 		targetNode = targetNode.parentNode;
 	}
 	return false;
+};
+
+
+
+/* --- HTMLをエクスポート --- */
+const exportHTML = () => {
+	/* 同じタグの入れ子を削除 */
+	const editableArea    = document.getElementById('description-wysiwyg');
+	const allowedSelector = allowedTags.map(tag => `${tag}>${tag}`).join(',');
+	let nestElements      = [... editableArea.querySelectorAll(allowedSelector)].filter(el => {
+		el.parentNode.normalize();
+		return el.childNodes.length === 1;
+	});
+	let replaceCount = 0;
+	while (nestElements.length > 0) {
+		nestElements.forEach(element => {
+			if (element.parentNode.childNodes.length === 1 && element.children.length < 1) {
+				element.parentNode.replaceWith(element);
+			}
+		});
+		nestElements = [... editableArea.querySelectorAll(allowedSelector)].filter(el => {
+			el.parentNode.normalize();
+			return el.childNodes.length === 1;
+		});
+		if (replaceCount++ > 255) break;
+	}
+	/* 許可されないタグと属性を削除 */
+	const editableChildren = [... editableArea.children].map(child => [... child.childNodes]).flat();
+	editableChildren.forEach(child => removeForbiddenTags(child));
+	/* テキストを取得 */
+	const htmlText = editableArea.innerHTML.replace(/<div>(.*?)<\/div>/g, '$1<br />\n').replace(/<br>/g, '<br />').trim().replace(/<br \/>$/g, '');
+	/* テキストエリアを更新 */
+	const textarea = document.getElementById('description-html');
+	textarea.value = htmlText;
+};
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('export-html').addEventListener('click', exportHTML);
+});
+
+
+
+/* --- 許可されないタグと属性を削除 --- */
+const removeForbiddenTags = element => {
+	/* テキストならそのままにする */
+	if (element.nodeName === '#text') return;
+	/* 先に子孫を処理(再帰) */
+	const baseChildren = [... element.children];
+	baseChildren.forEach(child => removeForbiddenTags(child));
+	/* 本体を処理 */
+	element.normalize();
+	const tagName = element.tagName.toLowerCase();
+	if (!allowedTags.includes(tagName) || (tagName !== 'br' && element.childNodes.length < 1)) {
+		[... element.childNodes].forEach(child => {
+			element.parentNode.insertBefore(child, element);
+		});
+		if (indentedTags.includes(tagName)) {
+			element.parentNode.insertBefore(document.createElement('br'), element);
+			element.parentNode.insertBefore(document.createTextNode('\n'), element);
+		}
+		element.remove();
+	} else {
+		[... element.attributes].forEach(attr => {
+			if (tagName !== 'font' || !['color', 'size'].includes(attr.name)) {
+				element.attributes.removeNamedItem(attr.name);
+			}
+		});
+	}
 };
