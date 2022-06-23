@@ -261,4 +261,5 @@ document.addEventListener('DOMContentLoaded', () => {
 	[... document.querySelectorAll('[aria-label="Close"]')].forEach(el => {
 		el.addEventListener('click', closeModal);
 	});
+	if (location.hash.replace('#','').toLowerCase() === 'about') openModalDescription();
 });
