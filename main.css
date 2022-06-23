@@ -5,6 +5,10 @@
 
 
 /* --- 全体レイアウト --- */
+body.dark-theme {
+  background-color : #1a1b1c;
+  color            : white;
+}
 .container {
   max-width : 1440px;
 }
@@ -13,7 +17,27 @@
 
 /* --- タイトルバー --- */
 h1 {
-  margin-top : 0.5rem;
+  display : inline-block;
+  margin  : 0.5rem 0px;
+}
+
+
+
+/* --- コントロールエリア --- */
+.html-group {
+  margin-bottom : 0.3rem;
+}
+label[for="switch-dark-theme"] {
+  margin-left : 0.5rem;
+  user-select : none;
+}
+.color-rect {
+  border-color : #444444;
+}
+.color-rect > div {
+  display      : inline-block;
+  width        : 1.1rem;
+  height       : 1.2rem;
 }
 
 
@@ -25,10 +49,11 @@ h1 {
   user-select : none;
 }
 #description-wysiwyg, #description-html {
-  padding       : 0.5rem;
-  height        : 50vh;
-  border        : solid 1px #444;
-  border-radius : 0.1rem;
+  padding          : 0.5rem;
+  height           : 50vh;
+  border           : solid 1px #444;
+  border-radius    : 0.1rem;
+  background-color : inherit;
 }
 #description-html {
   width : 100%;

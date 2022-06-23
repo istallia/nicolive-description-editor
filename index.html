@@ -15,6 +15,7 @@
 	<div class="columns">
 		<div class="column col-12">
 			<h1>ニコ生説明文エディタ</h1>
+			<a href="javascript:void(0);">ちょっとした説明</a>
 			<hr>
 		</div>
 	</div>
@@ -24,13 +25,43 @@
 <div class="container">
 	<div class="columns">
 		<div class="column col-6">
+			<div class="html-group">
+				<div class="btn-group">
+					<button id="export-html" class="btn btn-primary">HTMLに変換</button>
+					<button id="import-html" class="btn btn-primary">HTMLを読み込み</button>
+				</div>
+				<label for="switch-dark-theme" class="form-switch d-inline-block">
+					<input type="checkbox" id="switch-dark-theme">
+					<i class="form-icon"></i> niconico-darkmode
+				</label>
+			</div>
 			<div class="btn-group">
 				<button id="set-bold" class="btn">太字</button>
 				<button id="set-italic" class="btn">斜体</button>
 				<button id="set-underline" class="btn">下線</button>
 				<button id="set-strikethrough" class="btn">打消線</button>
-				<button id="reset-style" class="btn">スタイルを削除</button>
+				<button id="reset-style" class="btn btn-secondary">スタイルを削除</button>
 			</div>
+		</div>
+		<div class="column col-6">
+			<div class="input-group html-group">
+				<input type="color" id="font-color" class="form-input">
+				<select id="font-size" class="form-select">
+					<option value="1">サイズ 1 (最小)</option>
+					<option value="2">サイズ 2</option>
+					<option value="3" selected="true">サイズ 3 (標準)</option>
+					<option value="4">サイズ 4</option>
+					<option value="5">サイズ 5</option>
+					<option value="6">サイズ 6</option>
+					<option value="7">サイズ 7 (最大)</option>
+				</select>
+				<button id="set-font-color" class="btn input-group-btn">色を指定</button>
+				<button id="set-font-size"  class="btn input-group-btn">サイズを指定</button>
+				<button id="set-font-style" class="btn input-group-btn">色とサイズを両方指定</button>
+			</div>
+			<div class="form-group">
+				<button class="btn color-rect" color="#888888"><div style="background-color:#888888;"></div></button>
+				<button class="btn color-rect" color="#500505"><div style="background-color:#500505;"></div></button>
 		</div>
 	</div>
 	<div class="columns">
