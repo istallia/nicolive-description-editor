@@ -27,8 +27,8 @@
 		<div class="column col-6">
 			<div class="html-group">
 				<div class="btn-group">
-					<button id="export-html" class="btn btn-primary">HTMLに変換</button>
-					<button id="import-html" class="btn btn-primary">HTMLを読み込み</button>
+					<button id="export-html" class="btn">HTMLに変換</button>
+					<button id="import-html" class="btn">HTMLを読み込み</button>
 				</div>
 				<label for="switch-dark-theme" class="form-switch d-inline-block">
 					<input type="checkbox" id="switch-dark-theme">
@@ -128,6 +128,52 @@
 			</div>
 		</div>
 		<div class="modal-footer"></div>
+	</div>
+</div>
+
+<!-- モーダル: 変換の確認 -->
+<div id="modal-confirm-export" class="modal modal-sm">
+	<a href="#close" class="modal-overlay" aria-label="Close"></a>
+	<div class="modal-container">
+		<div class="modal-header">
+			<a href="#close" class="btn btn-clear float-right" aria-label="Close"></a>
+			<div class="modal-title h5">注意</div>
+		</div>
+		<div class="modal-body">
+			<div class="content">
+				<p>
+					テキストエリアの内容は変更されています。<br>
+					このまま変換すると、現在のテキストエリアの内容は失われます。<br>
+					このまま変換を続行しますか？
+				</p>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button id="continue-export-html" class="btn btn-primary">変換する</button>
+			<a href="#close" class="btn btn-link" aria-label="Close">やめる</a>
+		</div>
+	</div>
+</div>
+<div id="modal-confirm-import" class="modal modal-sm">
+	<a href="#close" class="modal-overlay" aria-label="Close"></a>
+	<div class="modal-container">
+		<div class="modal-header">
+			<a href="#close" class="btn btn-clear float-right" aria-label="Close"></a>
+			<div class="modal-title h5">注意</div>
+		</div>
+		<div class="modal-body">
+			<div class="content">
+				<p>
+					HTMLエディタの内容は変更されています。<br>
+					このまま読み込むすると、現在のHTMLエディタの内容は失われます。<br>
+					このまま読み込みを続行しますか？
+				</p>
+			</div>
+		</div>
+		<div class="modal-footer">
+			<button id="continue-import-html" class="btn btn-primary">読み込む</button>
+			<a href="#close" class="btn btn-link" aria-label="Close">やめる</a>
+		</div>
 	</div>
 </div>
 

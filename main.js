@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
 /* --- 各種タグを挿入する --- */
 const insertTagToSelectedRange = (tagName, attributes = {}) => {
 	const selection = window.getSelection();
-	if (!selection.rangeCount || !checkParentId(selection.focusNode.parentNode, 'description-wysiwyg')) return;
+	if (selection.rangeCount < 1 || selection.isCollapsed || !checkParentId(selection.focusNode.parentNode, 'description-wysiwyg')) return;
 	const range = selection.getRangeAt(0);
 	if (tagName.length > 0) {
 		/* タグを挿入する場合 */
@@ -96,7 +96,14 @@ const checkParentId = (node, targetId) => {
 
 
 /* --- HTMLをエクスポート --- */
-const exportHTML = () => {
+const exportHTML = (event, force = false) => {
+	/* テキストエリアが変更済みなら確認する */
+	if (!force && document.getElementById('import-html').classList.contains('btn-primary')) {
+		document.getElementById('modal-confirm-export').classList.add('active');
+		return;
+	}
+	document.getElementById('export-html').classList.remove('btn-primary');
+	document.getElementById('import-html').classList.remove('btn-primary');
 	/* 同じタグの入れ子を削除 */
 	const editableArea = document.getElementById('description-wysiwyg');
 	removeDuplicatedTags(editableArea);
@@ -117,12 +124,23 @@ const exportHTML = () => {
 };
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('export-html').addEventListener('click', exportHTML);
+	document.getElementById('continue-export-html').addEventListener('click', e => {
+		closeModal(e);
+		exportHTML(e, true);
+	});
 });
 
 
 
 /* --- HTMLをインポート --- */
-const importHTML = () => {
+const importHTML = (event, force = false) => {
+	/* HTMLエディタが変更済みなら確認する */
+	if (!force && document.getElementById('export-html').classList.contains('btn-primary')) {
+		document.getElementById('modal-confirm-import').classList.add('active');
+		return;
+	}
+	document.getElementById('export-html').classList.remove('btn-primary');
+	document.getElementById('import-html').classList.remove('btn-primary');
 	/* テキストをパース */
 	const htmlText = document.getElementById('description-html').value;
 	const parser   = new DOMParser();
@@ -141,6 +159,10 @@ const importHTML = () => {
 };
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('import-html').addEventListener('click', importHTML);
+	document.getElementById('continue-import-html').addEventListener('click', e => {
+		closeModal(e);
+		importHTML(e, true);
+	});
 });
 
 
@@ -196,6 +218,26 @@ const removeDuplicatedTags = element => {
 		if (replaceCount++ > 1023) break;
 	}
 };
+
+
+
+/* --- 入力したらボタンをハイライト --- */
+const highlightExportButton = () => {
+	const button = document.getElementById('export-html');
+	if (!button.classList.contains('btn-primary')) {
+		button.classList.add('btn-primary');
+	}
+};
+const highlightImportButton = () => {
+	const button = document.getElementById('import-html');
+	if (!button.classList.contains('btn-primary')) {
+		button.classList.add('btn-primary');
+	}
+};
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('description-wysiwyg').addEventListener('input', highlightExportButton);
+	document.getElementById('description-html').addEventListener('input', highlightImportButton);
+});
 
 
 
