@@ -221,7 +221,9 @@ const removeDuplicatedTags = element => {
 	let replaceCount = 0;
 	while (nestElements.length > 0) {
 		nestElements.forEach(element => {
-			if (element.parentNode.childNodes.length === 1 && element.children.length < 1) {
+			const parentAttributes  = JSON.stringify([... element.parentNode.attributes].map(attr => `${attr.name} => ${attr.value}`));
+			const elementAttributes = JSON.stringify([... element.attributes].map(attr => `${attr.name} => ${attr.value}`));
+			if (element.parentNode.childNodes.length === 1 && element.children.length < 1 && parentAttributes === elementAttributes) {
 				element.parentNode.replaceWith(element);
 			}
 		});
