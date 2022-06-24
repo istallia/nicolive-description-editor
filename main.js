@@ -16,12 +16,19 @@ const switchDarkTheme = event => {
 	const editableArea = document.getElementById('description-wysiwyg');
 	if (event.currentTarget.checked) {
 		editableArea.classList.add('dark-theme');
+		sessionStorage.setItem('dark-theme-enabled', 'true');
 	} else {
 		editableArea.classList.remove('dark-theme');
+		sessionStorage.setItem('dark-theme-enabled', 'false');
 	}
 };
 document.addEventListener('DOMContentLoaded', () => {
-	document.getElementById('switch-dark-theme').addEventListener('change', switchDarkTheme);
+	const sw = document.getElementById('switch-dark-theme');
+	sw.addEventListener('change', switchDarkTheme);
+	sw.checked = sessionStorage.getItem('dark-theme-enabled') === 'true';
+	if (sw.checked) {
+		document.getElementById('description-wysiwyg').classList.add('dark-theme');
+	}
 });
 
 
