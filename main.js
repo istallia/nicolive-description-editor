@@ -28,8 +28,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
 /* --- 各種タグを挿入する --- */
 const insertTagToSelectedRange = (tagName, attributes = {}) => {
-	const selection = window.getSelection();
-	if (selection.rangeCount < 1 || selection.isCollapsed || !checkParentId(selection.focusNode.parentNode, 'description-wysiwyg')) return;
+	const selection    = window.getSelection();
+	let nearestElement = selection.focusNode;
+	while (nearestElement.nodeName === '#text') nearestElement = nearestElement.parentNode;
+	if (selection.rangeCount < 1 || selection.isCollapsed || !nearestElement.closest('#description-wysiwyg')) return;
 	const range = selection.getRangeAt(0);
 	if (tagName.length > 0) {
 		/* タグを挿入する場合 */
@@ -57,7 +59,7 @@ const insertTagToSelectedRange = (tagName, attributes = {}) => {
 		}
 		if (diffParent.id === 'description-wysiwyg') {
 			const node     = document.createElement('div');
-			node.innerHTML = selection.toString();
+			node.innerText = range.toString();
 			range.deleteContents();
 			range.insertNode(node);
 		} else {
@@ -83,18 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-/* --- 親に当該IDの要素があるか調べる --- */
-const checkParentId = (node, targetId) => {
-	let targetNode = node;
-	while (targetNode.tagName.toLowerCase() !== 'body') {
-		if (targetNode.id === targetId) return true;
-		targetNode = targetNode.parentNode;
-	}
-	return false;
-};
-
-
-
 /* --- HTMLをエクスポート --- */
 const exportHTML = (event, force = false) => {
 	/* テキストエリアが変更済みなら確認する */
@@ -114,19 +104,28 @@ const exportHTML = (event, force = false) => {
 	let htmlText     = editableArea.innerHTML.replace(/<br>/g, '<br />');
 	let lastHtmlText = htmlText;
 	do {
-		lastHtmlText = htmlText;
+		lastHtmlText = htmlText; // divとpを改行に変換
 		htmlText     = htmlText.replace(/<(?:div|p)>(.*?)<\/(?:div|p)>/gs, '$1<br />\n');
 	} while (htmlText !== lastHtmlText);
-	htmlText = htmlText.trim().replace(/<br(?: \/)?>$/g, '');
+	do {
+		lastHtmlText = htmlText; // 末尾の改行を削除
+		htmlText     = htmlText.trim().replace(/<br(?: \/)?>$/g, '');
+	} while (htmlText !== lastHtmlText);
 	/* テキストエリアを更新 */
 	const textarea = document.getElementById('description-html');
 	textarea.value = htmlText;
 };
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('export-html').addEventListener('click', exportHTML);
-	document.getElementById('continue-export-html').addEventListener('click', e => {
-		closeModal(e);
-		exportHTML(e, true);
+	document.getElementById('continue-export-html').addEventListener('click', event => {
+		closeModal(event);
+		exportHTML(event, true);
+	});
+	document.getElementById('description-wysiwyg').addEventListener('keydown', event => {
+		if (event.key.toLowerCase() === 's' && event.ctrlKey) {
+			event.preventDefault();
+			exportHTML();
+		}
 	});
 });
 
@@ -159,9 +158,15 @@ const importHTML = (event, force = false) => {
 };
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('import-html').addEventListener('click', importHTML);
-	document.getElementById('continue-import-html').addEventListener('click', e => {
-		closeModal(e);
-		importHTML(e, true);
+	document.getElementById('continue-import-html').addEventListener('click', event => {
+		closeModal(event);
+		importHTML(event, true);
+	});
+	document.getElementById('description-html').addEventListener('keydown', event => {
+		if (event.key.toLowerCase() === 's' && event.ctrlKey) {
+			event.preventDefault();
+			importHTML();
+		}
 	});
 });
 
@@ -285,6 +290,29 @@ document.addEventListener('DOMContentLoaded', () => {
 		button.appendChild(div);
 		parent.appendChild(button);
 	});
+});
+
+
+
+/* --- HTMLエディタへのテキスト貼り付け --- */
+const pasteText = event => {
+	/* テキスト以外はお断り */
+	event.preventDefault();
+	const text = event.clipboardData.getData('text');
+	if (text.length < 1) return;
+	/* 挿入 */
+	const selection = window.getSelection();
+	const textNode  = document.createTextNode(text);
+	if (selection.rangeCount < 1) return;
+	const range = selection.getRangeAt(0);
+	if (!selection.isCollapsed) range.deleteContents();
+	range.insertNode(textNode);
+	selection.collapseToEnd();
+	/* 変化があったことを告げる */
+	document.getElementById('export-html').classList.add('btn-primary');
+};
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('description-wysiwyg').addEventListener('paste', pasteText);
 });
 
 
