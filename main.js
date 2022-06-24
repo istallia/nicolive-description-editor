@@ -69,6 +69,7 @@ const insertTagToSelectedRange = (tagName, attributes = {}) => {
 		}
 		diffParent.normalize();
 	}
+	document.getElementById('export-html').classList.add('btn-primary');
 };
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('set-bold'         ).addEventListener('click', () => insertTagToSelectedRange('b'));
@@ -114,6 +115,7 @@ const exportHTML = (event, force = false) => {
 	/* テキストエリアを更新 */
 	const textarea = document.getElementById('description-html');
 	textarea.value = htmlText;
+	updateCharCount();
 };
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('export-html').addEventListener('click', exportHTML);
@@ -242,6 +244,17 @@ const highlightImportButton = () => {
 document.addEventListener('DOMContentLoaded', () => {
 	document.getElementById('description-wysiwyg').addEventListener('input', highlightExportButton);
 	document.getElementById('description-html').addEventListener('input', highlightImportButton);
+});
+
+
+
+/* --- テキストエリアを更新したら文字数更新 --- */
+const updateCharCount = () => {
+	const charCount = document.getElementById('description-html').value.length;
+	document.getElementById('char-count').innerText = String(charCount);
+};
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('description-html').addEventListener('input', updateCharCount);
 });
 
 
