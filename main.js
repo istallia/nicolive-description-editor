@@ -280,22 +280,23 @@ const recordColorHistory = color => {
 	/* 色を記録(ボタン) */
 	const parent = document.getElementById('color-history');
 	if (index > -1) {
-		const button = parent.children[index];
-		parent.insertBefore(button, parent.firstElementChild);
+		const button = parent.children[index+1];
+		parent.firstElementChild.insertAdjacentElement('afterend', button);
 	} else {
 		const button = document.createElement('button');
 		const div    = document.createElement('div');
 		button.classList.add('btn', 'color-rect');
 		button.title = color;
+		button.setAttribute('hex-color', color);
 		button.addEventListener('click', applyColor);
 		div.style.backgroundColor = color;
 		button.appendChild(div);
-		parent.insertBefore(button, parent.firstElementChild);
+		parent.firstElementChild.insertAdjacentElement('afterend', button);
 	}
 	if (parent.children.length > maxHistoryCount) parent.lastElementChild.remove();
 };
 const applyColor = event => {
-	const color = event.currentTarget.title;
+	const color = event.currentTarget.getAttribute('hex-color');
 	const form  = document.getElementById('font-color');
 	form.value  = color;
 };
@@ -307,11 +308,27 @@ document.addEventListener('DOMContentLoaded', () => {
 		const div    = document.createElement('div');
 		button.classList.add('btn', 'color-rect');
 		button.title = color;
+		button.setAttribute('hex-color', color);
 		button.addEventListener('click', applyColor);
 		div.style.backgroundColor = color;
 		button.appendChild(div);
 		parent.appendChild(button);
 	});
+});
+
+
+
+/* --- モーダル: カラーパレット --- */
+const openModalColorPalette = () => {
+	document.getElementById('modal-color-palette').classList.add('active');
+};
+document.addEventListener('DOMContentLoaded', () => {
+	document.getElementById('open-palette').addEventListener('click', openModalColorPalette);
+	const buttons = [... document.querySelectorAll('#modal-color-palette button.btn.color-rect')];
+	buttons.forEach(button => button.addEventListener('click', event => {
+		applyColor(event);
+		document.getElementById('modal-color-palette').classList.remove('active');
+	}));
 });
 
 

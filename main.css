@@ -27,12 +27,18 @@ label[for="switch-dark-theme"] {
   margin-left : 0.5rem;
   user-select : none;
 }
+#open-palette {
+  margin-right : 0.15rem;
+}
 .color-rect {
   margin       : 0px 0.15rem;
   border-color : #444444;
 }
-.color-rect:first-of-type {
-  margin-left : 0px;
+#modal-color-palette .color-rect {
+  margin-bottom : 0.15rem;
+}
+#modal-color-palette .color-title:nth-child(n+2) {
+  margin-top : 0.3rem;
 }
 .color-rect > div {
   display      : inline-block;

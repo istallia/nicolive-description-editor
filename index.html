@@ -59,7 +59,7 @@
 				<button id="set-font-size"  class="btn input-group-btn">サイズを指定</button>
 				<button id="set-font-style" class="btn input-group-btn">色とサイズを両方指定</button>
 			</div>
-			<div class="form-group" id="color-history"></div>
+			<div class="form-group" id="color-history"><button id="open-palette" class="btn">パレット</button></div>
 	</div>
 	<div class="columns">
 		<div class="column col-12"><hr></div>
@@ -79,6 +79,105 @@
 			<span class="caption">テキストエリア (<span id="char-count">13</span>文字)</span>
 			<textarea id="description-html" cols="30" rows="10" spellcheck="false">ここに説明文を入力します。</textarea>
 		</div>
+	</div>
+</div>
+
+<!-- モーダル: カラーパレット -->
+<div id="modal-color-palette" class="modal">
+	<a href="#close" class="modal-overlay" aria-label="Close"></a>
+	<div class="modal-container">
+		<div class="modal-header">
+			<a href="#close" class="btn btn-clear float-right" aria-label="Close"></a>
+			<div class="modal-title h5">カラーパレット</div>
+		</div>
+		<div class="modal-body">
+			<div class="content">
+				<div class="color-title">基本</div>
+				<div>
+					<button class="btn color-rect" title="white" hex-color="#ffffff"><div style="background-color:white"></div></button>
+					<button class="btn color-rect" title="yellow" hex-color="#ffff00"><div style="background-color:yellow"></div></button>
+					<button class="btn color-rect" title="fuchsia" hex-color="#ff00ff"><div style="background-color:fuchsia"></div></button>
+					<button class="btn color-rect" title="red" hex-color="#ff0000"><div style="background-color:red"></div></button>
+					<button class="btn color-rect" title="silver" hex-color="#c0c0c0"><div style="background-color:silver"></div></button>
+					<button class="btn color-rect" title="gray" hex-color="#808080"><div style="background-color:gray"></div></button>
+					<button class="btn color-rect" title="olive" hex-color="#808000"><div style="background-color:olive"></div></button>
+					<button class="btn color-rect" title="purple" hex-color="#800080"><div style="background-color:purple"></div></button>
+					<button class="btn color-rect" title="maroon" hex-color="#800000"><div style="background-color:maroon"></div></button>
+					<button class="btn color-rect" title="aqua" hex-color="#00ffff"><div style="background-color:aqua"></div></button>
+					<button class="btn color-rect" title="lime" hex-color="#00ff00"><div style="background-color:lime"></div></button>
+					<button class="btn color-rect" title="teal" hex-color="#008080"><div style="background-color:teal"></div></button>
+					<button class="btn color-rect" title="green" hex-color="#008000"><div style="background-color:green"></div></button>
+					<button class="btn color-rect" title="blue" hex-color="#0000ff"><div style="background-color:blue"></div></button>
+					<button class="btn color-rect" title="navy" hex-color="#000080"><div style="background-color:navy"></div></button>
+					<button class="btn color-rect" title="black" hex-color="#000000"><div style="background-color:black"></div></button>
+				</div>
+				<div class="color-title">パステル</div>
+				<div>
+					<button class="btn color-rect" title="#ff7f7f" hex-color="#ff7f7f"><div style="background-color:#ff7f7f"></div></button>
+					<button class="btn color-rect" title="#ff7fbf" hex-color="#ff7fbf"><div style="background-color:#ff7fbf"></div></button>
+					<button class="btn color-rect" title="#ff7fff" hex-color="#ff7fff"><div style="background-color:#ff7fff"></div></button>
+					<button class="btn color-rect" title="#bf7fff" hex-color="#bf7fff"><div style="background-color:#bf7fff"></div></button>
+					<button class="btn color-rect" title="#7f7fff" hex-color="#7f7fff"><div style="background-color:#7f7fff"></div></button>
+					<button class="btn color-rect" title="#7fbfff" hex-color="#7fbfff"><div style="background-color:#7fbfff"></div></button>
+					<button class="btn color-rect" title="#7fffff" hex-color="#7fffff"><div style="background-color:#7fffff"></div></button>
+					<button class="btn color-rect" title="#7fffbf" hex-color="#7fffbf"><div style="background-color:#7fffbf"></div></button>
+					<button class="btn color-rect" title="#7fff7f" hex-color="#7fff7f"><div style="background-color:#7fff7f"></div></button>
+					<button class="btn color-rect" title="#bfff7f" hex-color="#bfff7f"><div style="background-color:#bfff7f"></div></button>
+					<button class="btn color-rect" title="#ffff7f" hex-color="#ffff7f"><div style="background-color:#ffff7f"></div></button>
+					<button class="btn color-rect" title="#ffbf7f" hex-color="#ffbf7f"><div style="background-color:#ffbf7f"></div></button>
+				</div>
+				<div class="color-title">東京メトロ</div>
+				<div>
+					<button class="btn color-rect" title="銀座線オレンジ(2014)" hex-color="#ff9500"><div style="background-color:#ff9500"></div></button>
+					<button class="btn color-rect" title="丸ノ内線レッド(2014)" hex-color="#f62e36"><div style="background-color:#f62e36"></div></button>
+					<button class="btn color-rect" title="日比谷線シルバー(2014)" hex-color="#b5b5ac"><div style="background-color:#b5b5ac"></div></button>
+					<button class="btn color-rect" title="東西線スカイ(2014)" hex-color="#009bbf"><div style="background-color:#009bbf"></div></button>
+					<button class="btn color-rect" title="千代田線グリーン(2014)" hex-color="#00bb85"><div style="background-color:#00bb85"></div></button>
+					<button class="btn color-rect" title="有楽町線ゴールド(2014)" hex-color="#c1a470"><div style="background-color:#c1a470"></div></button>
+					<button class="btn color-rect" title="半蔵門線パープル(2014)" hex-color="#8f76d6"><div style="background-color:#8f76d6"></div></button>
+					<button class="btn color-rect" title="南北線エメラルド(2014)" hex-color="#00ac9b"><div style="background-color:#00ac9b"></div></button>
+					<button class="btn color-rect" title="副都心線ブラウン(2014)" hex-color="#9c5e31"><div style="background-color:#9c5e31"></div></button>
+					<button class="btn color-rect" title="銀座線オレンジ" hex-color="#f39700"><div style="background-color:#f39700"></div></button>
+					<button class="btn color-rect" title="丸の内線レッド" hex-color="#e60012"><div style="background-color:#e60012"></div></button>
+					<button class="btn color-rect" title="日比谷線シルバー" hex-color="#9caeb7"><div style="background-color:#9caeb7"></div></button>
+					<button class="btn color-rect" title="東西線スカイ" hex-color="#00a7db"><div style="background-color:#00a7db"></div></button>
+					<button class="btn color-rect" title="千代田線グリーン" hex-color="#009944"><div style="background-color:#009944"></div></button>
+					<button class="btn color-rect" title="有楽町線ゴールド" hex-color="#d7c447"><div style="background-color:#d7c447"></div></button>
+					<button class="btn color-rect" title="半蔵門線パープル" hex-color="#9b7cb6"><div style="background-color:#9b7cb6"></div></button>
+					<button class="btn color-rect" title="南北線エメラルド" hex-color="#00ada9"><div style="background-color:#00ada9"></div></button>
+					<button class="btn color-rect" title="副都心線ブラウン" hex-color="#bb641d"><div style="background-color:#bb641d"></div></button>
+					<button class="btn color-rect" title="浅草線ローズ" hex-color="#e85298"><div style="background-color:#e85298"></div></button>
+					<button class="btn color-rect" title="三田線ブルー" hex-color="#0079c2"><div style="background-color:#0079c2"></div></button>
+					<button class="btn color-rect" title="新宿線リーフ" hex-color="#6cbb5a"><div style="background-color:#6cbb5a"></div></button>
+					<button class="btn color-rect" title="大江戸線ルビー" hex-color="#b6007a"><div style="background-color:#b6007a"></div></button>
+					<button class="btn color-rect" title="御堂筋線 臙脂" hex-color="#e5171f"><div style="background-color:#e5171f"></div></button>
+					<button class="btn color-rect" title="谷町線 京紫" hex-color="#522886"><div style="background-color:#522886"></div></button>
+					<button class="btn color-rect" title="四つ橋線 縹" hex-color="#0078ba"><div style="background-color:#0078ba"></div></button>
+					<button class="btn color-rect" title="中央線 緑" hex-color="#019a66"><div style="background-color:#019a66"></div></button>
+					<button class="btn color-rect" title="千日前線 紅梅" hex-color="#e44d93"><div style="background-color:#e44d93"></div></button>
+					<button class="btn color-rect" title="堺筋線 マルーン" hex-color="#814721"><div style="background-color:#814721"></div></button>
+					<button class="btn color-rect" title="長堀鶴見緑地線 萌緑" hex-color="#a9cc51"><div style="background-color:#a9cc51"></div></button>
+					<button class="btn color-rect" title="今里筋線 柑子" hex-color="#ee7b1a"><div style="background-color:#ee7b1a"></div></button>
+					<button class="btn color-rect" title="南港ポートタウン線 セルリアンブルー" hex-color="#00a0de"><div style="background-color:#00a0de"></div></button>
+				</div>
+				<div class="color-title">近畿日本鉄道</div>
+				<div>
+					<button class="btn color-rect" title="難波線・奈良線/生駒線" hex-color="#d21644"><div style="background-color:#d21644"></div></button>
+					<button class="btn color-rect" title="京都線・橿原線/天理線/田原本線" hex-color="#fab202"><div style="background-color:#fab202"></div></button>
+					<button class="btn color-rect" title="けいはんな線" hex-color="#32cd32"><div style="background-color:#32cd32"></div></button>
+					<button class="btn color-rect" title="大阪線/信貴線" hex-color="#4694d1"><div style="background-color:#4694d1"></div></button>
+					<button class="btn color-rect" title="名古屋線/湯の山線/鈴鹿線" hex-color="#153f97"><div style="background-color:#153f97"></div></button>
+					<button class="btn color-rect" title="山田線・鳥羽線・志摩線" hex-color="#00b3c1"><div style="background-color:#00b3c1"></div></button>
+					<button class="btn color-rect" title="南大阪線・吉野線/道明寺線/長野線/御所線" hex-color="#028e46"><div style="background-color:#028e46"></div></button>
+					<button class="btn color-rect" title="生駒鋼索線/西信貴鋼索線" hex-color="#dd9966"><div style="background-color:#dd9966"></div></button>
+				</div>
+				<ul>
+					<li><a href="https://www.colordic.org/" target="_blank">原色大辞典</a></li>
+					<li><a href="https://ja.wikipedia.org/wiki/日本の鉄道ラインカラー一覧" target="_blank">日本の鉄道ラインカラー一覧 - Wikipedia</a></li>
+				</ul>
+			</div>
+		</div>
+		<div class="modal-footer"></div>
 	</div>
 </div>
 
